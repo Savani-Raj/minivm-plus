@@ -1,0 +1,13 @@
+// Simple function call test
+
+function multiply(a, b) {
+    return a * b;
+}
+
+// Test function call
+let x = multiply(5, 3);
+print(x);  // Should print 15
+
+// Direct computation for comparison
+let y = 5 * 3;
+print(y);  // Should print 15

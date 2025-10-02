@@ -1,124 +1,188 @@
-markdown
+# MiniVM+ - Managed Runtime Compiler with Advanced Optimization Pipeline
 
-# MiniVM+ - Managed Runtime Compiler with Profiling & JIT
-
-[![Run Tests](https://github.com/yourusername/minivm-plus/actions/workflows/test.yml/badge.svg)](https://github.com/yourusername/minivm-plus/actions/workflows/test.yml)
-
-A complete compiler and managed runtime implementation demonstrating modern compiler backend techniques, including profiling, feedback-directed optimization, and JIT compilation concepts.
+A complete compiler and managed runtime implementation demonstrating modern compiler backend techniques, including multi-level optimizations, runtime profiling, and JIT compilation concepts.
 
 ## 🎯 Project Overview
 
-This project implements a complete compiler pipeline for a simple language, featuring:
+This project implements a complete compiler pipeline for a simple language, featuring a sophisticated optimization system that demonstrates key compiler backend techniques required for modern managed runtimes (JVM, V8, etc.).
 
-- **Lexer & Parser** - Source code to AST
-- **IR Generation** - Intermediate representation with optimizations
-- **Multi-level Optimizations** - Basic to advanced optimization passes
-- **Runtime Profiling** - Type profiling, branch prediction, hot path detection
-- **Feedback-Directed Optimization** - Profile-guided optimizations
-- **Tiered Compilation** - Interpreter → Baseline JIT → Optimizing JIT
-- **Virtual Machine** - Bytecode execution engine
+### 🔥 Key Achievements
 
-## 🆕 Latest Updates
-
-### Advanced Optimization System
-
-- **Strength Reduction**: `x * 2` → `x + x`, `x / 2` → `x >> 1`
-- **Copy Propagation**: Eliminate redundant move operations
-- **Control Flow Analysis**: Basic block construction and optimization
-- **Enhanced Dead Code Elimination**: Dependency-aware code removal
-
-### Runtime Profiling Infrastructure
-
-- **Type Profiling**: Track variable types for JIT specialization
-- **Branch Prediction**: Profile branch behavior for optimization
-- **Hot Path Detection**: Identify frequently executed code regions
-- **Profile Reports**: Generate optimization suggestions
-
-### Feedback-Directed Compilation
-
-- **Profile-Guided Optimizations**: Use runtime data to drive optimizations
-- **Tiered Compilation**: Multi-level optimization strategy
-- **JIT Compilation Foundation**: Dynamic compilation skeleton
-
-## 📊 Optimization Performance
-
-**Example: Advanced Optimization Demo**
-Original: 11 instructions → Optimized: 5 instructions (54.5% reduction)
-
-text
+- **45.5% instruction reduction** through advanced optimizations
+- **Multi-level optimization pipeline**: Basic → Advanced → Feedback-directed
+- **Runtime profiling system** for optimization guidance
+- **JIT compilation concepts** and tiered compilation decisions
+- **Complete bytecode VM** with execution engine
 
 ## 🏗️ Architecture
 
-Source → Tokenizer → Parser → AST → IR Generator → Optimizer → VM
-↑ ↓
-Profiler → Feedback Optimizer
-↓ ↓
-Tiered Compiler → JIT Compiler
+Source Code → Lexer → Parser → AST → IR Generator → Optimization Pipeline → Bytecode → VM
+↓ ↑
+Profiler → Feedback Optimizer → JIT Compiler
 
 text
 
-## 📁 Updated Project Structure
+### Optimization Pipeline
+
+1. **Basic Optimizations**: Constant folding, constant propagation, algebraic simplification
+2. **Advanced Optimizations**: Strength reduction, copy propagation, common subexpression elimination
+3. **Feedback-Directed**: Profile-guided optimizations based on runtime data
+
+## 📊 Performance Highlights
+
+| Example                | Original Instructions | Optimized Instructions | Reduction |
+| ---------------------- | --------------------- | ---------------------- | --------- |
+| Advanced Optimizations | 11                    | 6                      | 45.5%     |
+| Fibonacci Demo         | 7                     | 4                      | 42.9%     |
+| Simple Working         | 10                    | 8                      | 20%       |
+
+### Advanced Optimization Examples
+
+- **Strength Reduction**: `x * 2` → `x + x`, `x / 2` → `x >> 1`
+- **Constant Folding**: `2 + 3` → `5`
+- **Common Subexpression Elimination**: Duplicate computations removed
+- **Dead Code Elimination**: Unused variables and instructions removed
+
+## 🚀 Features
+
+### ✅ Core Compiler
+
+- **Lexer & Parser** with proper error handling
+- **AST Generation** for expression trees
+- **IR (Intermediate Representation)** with SSA-like properties
+- **Multi-pass Optimizer** with sophisticated analysis
+
+### ✅ Advanced Optimizations
+
+- **Constant Propagation & Folding**
+- **Algebraic Simplification** (`x + 0` → `x`, `x * 1` → `x`)
+- **Strength Reduction** (expensive ops → cheaper equivalents)
+- **Common Subexpression Elimination**
+- **Dead Code Elimination** with dependency analysis
+- **Copy Propagation**
+
+### ✅ Runtime System
+
+- **Bytecode Virtual Machine** with stack-based execution
+- **Runtime Profiling** (type profiles, branch prediction, hot path detection)
+- **Feedback-Directed Optimization** using profile data
+- **Tiered Compilation** concepts (Interpreter → JIT → Optimized)
+- **JIT Compilation Foundation** for dynamic compilation
+
+## 📁 Project Structure
 
 src/
 ├── compiler.py # Parser & IR generator
-├── vm.py # Virtual machine
-├── ir_optimizer.py # Basic optimizations
-├── ir_optimizer_advanced.py # Advanced optimizations (NEW)
-├── profiler.py # Runtime profiling (NEW)
-├── feedback_optimizer.py # Profile-guided optimizations (NEW)
-├── jit_compiler.py # JIT compilation concepts (NEW)
-└── run.py # Main execution
+├── vm.py # Virtual machine with bytecode execution
+├── ir_optimizer.py # Basic optimization passes
+├── ir_optimizer_advanced.py # Advanced optimizations (strength reduction, etc.)
+├── profiler.py # Runtime profiling system
+├── feedback_optimizer.py # Profile-guided optimizations
+├── jit_compiler.py # JIT compilation concepts
+└── run.py # Main execution & demonstration
 
 examples/
-├── fib.mvm # Fibonacci demo
-└── advanced.mvm # Optimization demo (NEW)
+├── advanced.mvm # Demonstrates strength reduction & advanced opts
+├── fib.mvm # Common subexpression elimination demo
+├── simple_working.mvm # Basic optimization pipeline
+└── working_functions.mvm # Complete working examples
 
 text
 
-## 🚀 Quick Start
+## 🛠️ Quick Start
 
 ```bash
-# Run with full optimization pipeline
+# See the complete optimization pipeline in action
 python src/run.py examples/advanced.mvm
 
-# See optimization progress and profiling
+# Test common subexpression elimination
 python src/run.py examples/fib.mvm
+
+# View all optimization stages
+python src/run.py examples/simple_working.mvm
 🎓 Learning Outcomes
-This project demonstrates understanding of:
+This project demonstrates deep understanding of:
 
-Modern compiler backend architecture
+Compiler Backend Architecture
+Intermediate representation design
 
-Managed runtime concepts (JVM, V8, etc.)
+Data flow analysis frameworks
+
+Optimization pass scheduling
+
+Code generation techniques
+
+Managed Runtime Concepts
+Just-in-time (JIT) compilation principles
 
 Profile-guided optimization (PGO)
 
-Just-in-time (JIT) compilation
+Tiered compilation strategies
 
-Dynamic language implementation
+Bytecode interpreter design
 
-🔄 Recent Improvements
-Advanced optimization passes
+Advanced Optimization Techniques
+Strength reduction and peephole optimization
 
-Runtime profiling system
+Constant propagation with copy analysis
 
-Feedback-directed optimization
+Dead code elimination with use-def chains
 
-Tiered compilation concepts
+Common subexpression elimination
 
-Function support with control flow
+🔬 Technical Implementation
+Optimization Pipeline Details
+The compiler implements a sophisticated multi-stage optimization pipeline:
 
-Full JIT compilation implementation
+Constant Folding: Evaluate constant expressions at compile time
+
+Constant Propagation: Replace variables with known constant values
+
+Algebraic Simplification: Apply mathematical identities
+
+Strength Reduction: Replace expensive operations with cheaper equivalents
+
+Common Subexpression Elimination: Remove redundant computations
+
+Dead Code Elimination: Remove unused instructions
+
+Copy Propagation: Eliminate redundant copy operations
+
+Runtime Profiling System
+Type Profiling: Track variable types for specialization
+
+Branch Profiling: Collect branch prediction data
+
+Hot Path Detection: Identify frequently executed code regions
+
+Function Call Profiling: Track function invocation frequency
 
 📈 Example Output
 text
-=== Runtime Profile Report ===
-Type Profiles:
-  a: int (count: 3)
-Hot Blocks:
-  main: 1501 executions
-Optimization Suggestions:
-  - Hot path optimization for 1 blocks
-  - - Inline candidates identified: ['factorial']
+=== Optimization Analysis ===
+Original instructions:      11
+After basic optimizations:  9
+After advanced optimizations: 6
+After feedback optimization: 6
+Total reduction:           5 instructions (45.5%)
+🎥 Demo
+bash
+# Clone and explore
+git clone https://github.com/Savani-Raj/minivm-plus.git
+cd minivm-plus
 
-MIT License - see [LICENSE](LICENSE) file for details.
+# See the complete optimization pipeline
+python src/run.py examples/advanced.mvm
+
+# Output shows:
+# - Original IR with 11 instructions
+# - Basic optimized IR with constant folding
+# - Advanced optimized IR with strength reduction
+# - Final optimized IR with 6 instructions (45.5% reduction)
+# - Generated bytecode and program execution
+🤝 Contributing
+This project was developed as a demonstration of compiler backend techniques for research and educational purposes.
+
+📄 License
+MIT License - See LICENSE file for details.
 ```

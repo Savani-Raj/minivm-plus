@@ -1,0 +1,21 @@
+// Real function call demonstration
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function factorial(n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+// Test real function calls
+let x = multiply(5, 3);
+print(x);  // Should print 15
+
+let y = factorial(5); 
+print(y);  // Should print 120
+
+// Direct computation for comparison
+let z = 5 * 3;
+print(z);  // Should print 15

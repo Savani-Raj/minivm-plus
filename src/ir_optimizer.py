@@ -2,12 +2,11 @@ from typing import List, Tuple, Dict
 
 class IRInstr:
     def __init__(self, op: str, dest: str, a=None, b=None):
-        self.op = op      # e.g., "add", "mul", "const", "mov", "print", "call", "return"
+        self.op = op      # e.g., "add", "mul", "const", "mov", "print"
         self.dest = dest  # target variable
         self.a = a
         self.b = b
 
-    # Add to the existing IRInstr class __repr__ method:
     def __repr__(self):
         if self.op == "const":
             return f"{self.dest} = {self.a}"
@@ -25,11 +24,15 @@ class IRInstr:
             return f"param {self.a} = ${self.b}"
         elif self.op == "arg":
             return f"arg {self.a} = {self.b}"
-        elif self.op == "functions":
-            return f"<function definitions>"
+        elif self.op == "function_info":
+            return f"function_info: {len(self.a) if self.a else 0} functions"
+        elif self.op == "push_arg":
+            return f"push_arg {self.a} = {self.b}"
         else:
-            return f"{self.dest} = {self.a} {self.op} {self.b}"
-
+            # Handle None values in binary operations
+            a_str = self.a if self.a is not None else "None"
+            b_str = self.b if self.b is not None else "None"
+            return f"{self.dest} = {a_str} {self.op} {b_str}"
 
 def is_const(x):
     return isinstance(x, (int, float))
@@ -52,35 +55,26 @@ def const_fold(instrs: List['IRInstr']) -> List['IRInstr']:
 
 def const_propagation(instrs: List['IRInstr']) -> List['IRInstr']:
     """Replace variables with their known constant values"""
-    const_map = {}
     out = []
+    consts: Dict[str, int] = {}
     
     for ins in instrs:
-        # Substitute constants in operands
-        a_sub = const_map.get(ins.a, ins.a)
-        b_sub = const_map.get(ins.b, ins.b)
-        
         if ins.op == "const":
-            const_map[ins.dest] = a_sub  # a_sub is the constant value
-            out.append(IRInstr("const", ins.dest, a=a_sub))
-        elif ins.op == "mov" and a_sub in const_map:
-            # Propagate constant through mov
-            const_map[ins.dest] = const_map[a_sub]
-            out.append(IRInstr("const", ins.dest, a=const_map[a_sub]))
-        elif ins.op in {"+", "-", "*", "/"}:
-            # Create new instruction with substituted values
-            new_ins = IRInstr(ins.op, ins.dest, a_sub, b_sub)
-            out.append(new_ins)
-            # If this produces a constant, track it
-            if is_const(a_sub) and is_const(b_sub):
-                if ins.op == "+": const_map[ins.dest] = a_sub + b_sub
-                elif ins.op == "-": const_map[ins.dest] = a_sub - b_sub
-                elif ins.op == "*": const_map[ins.dest] = a_sub * b_sub
-                elif ins.op == "/": const_map[ins.dest] = a_sub / b_sub if b_sub != 0 else 0
-        elif ins.op == "print":
-            out.append(IRInstr("print", None, a=const_map.get(ins.a, ins.a)))
-        else:
+            consts[ins.dest] = ins.a
             out.append(ins)
+        elif ins.op == "mov" and ins.a in consts:
+            # variable move of constant
+            out.append(IRInstr("const", ins.dest, a=consts[ins.a]))
+            consts[ins.dest] = consts[ins.a]
+        else:
+            # FIX: Handle None values properly
+            a = consts.get(ins.a, ins.a) if ins.a is not None else None
+            b = consts.get(ins.b, ins.b) if ins.b is not None else None
+            out.append(IRInstr(ins.op, ins.dest, a, b))
+            
+            # Remove destination from constants if it's being overwritten
+            if ins.dest in consts and ins.op not in {"print", "function_info"}:
+                del consts[ins.dest]
     
     return out
 

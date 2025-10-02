@@ -63,70 +63,33 @@ def ir_to_bytecode(ir):
                 bytecode.append(("LOAD_VAR", ins.a))
             bytecode.append(("PRINT", None))
             
-        elif ins.op in {"hot_annotation", "branch_hint", "inline_candidate"}:
-            # Profile annotations - ignored in execution but useful for debugging
-            bytecode.append(("PROFILE_ANNOTATION", f"{ins.op}:{ins.dest}"))
-            
-    return bytecode
-
-def ir_to_bytecode(ir):
-    """Convert IR instructions to VM bytecode"""
-    bytecode = []
-    for ins in ir:
-        if ins.op == "const":
-            bytecode.append(("LOAD_CONST", ins.a))
+        elif ins.op == "call":
+            # Push argument count
+            bytecode.append(("LOAD_CONST", ins.b))
+            # Call function
+            bytecode.append(("CALL_FUNCTION", ins.a))
+            # Store result if needed
             if ins.dest:
                 bytecode.append(("STORE_VAR", ins.dest))
-        elif ins.op in {"+", "-", "*", "/", "<<", ">>", "//"}:
-            # Handle left operand
-            if isinstance(ins.a, (int, float)):
-                bytecode.append(("LOAD_CONST", ins.a))
-            else:
-                bytecode.append(("LOAD_VAR", ins.a))
                 
-            # Handle right operand  
+        elif ins.op == "push_arg":
+            # Push argument value
             if isinstance(ins.b, (int, float)):
                 bytecode.append(("LOAD_CONST", ins.b))
             else:
                 bytecode.append(("LOAD_VAR", ins.b))
                 
-            # Add the operation
-            if ins.op == "+": 
-                bytecode.append(("BINARY_ADD", None))
-            elif ins.op == "-": 
-                bytecode.append(("BINARY_SUB", None))
-            elif ins.op == "*": 
-                bytecode.append(("BINARY_MUL", None))
-            elif ins.op == "/": 
-                bytecode.append(("BINARY_DIV", None))
-            elif ins.op == "//": 
-                bytecode.append(("BINARY_FLOORDIV", None))
-            elif ins.op == "<<": 
-                bytecode.append(("BINARY_SHL", None))
-            elif ins.op == ">>": 
-                bytecode.append(("BINARY_SHR", None))
+        elif ins.op == "return":
+            if isinstance(ins.a, (int, float)):
+                bytecode.append(("LOAD_CONST", ins.a))
+            else:
+                bytecode.append(("LOAD_VAR", ins.a))
+            bytecode.append(("RETURN", None))
             
-            # Store result if there's a destination
-            if ins.dest:
-                bytecode.append(("STORE_VAR", ins.dest))
-                
-        elif ins.op == "mov":
-            if isinstance(ins.a, (int, float)):
-                bytecode.append(("LOAD_CONST", ins.a))
-            else:
-                bytecode.append(("LOAD_VAR", ins.a))
-            if ins.dest:
-                bytecode.append(("STORE_VAR", ins.dest))
-                
-        elif ins.op == "print":
-            if isinstance(ins.a, (int, float)):
-                bytecode.append(("LOAD_CONST", ins.a))
-            else:
-                bytecode.append(("LOAD_VAR", ins.a))
-            bytecode.append(("PRINT", None))
+        elif ins.op == "function_info":
+            bytecode.append(("FUNCTION_INFO", ins.a))
             
         elif ins.op in {"hot_annotation", "branch_hint", "inline_candidate"}:
-            # Profile annotations - ignored in execution but useful for debugging
             bytecode.append(("PROFILE_ANNOTATION", f"{ins.op}:{ins.dest}"))
             
     return bytecode
@@ -202,6 +165,7 @@ def main():
         print("  python src/run.py examples/fib.mvm")
         print("  python src/run.py examples/advanced.mvm") 
         print("  python src/run.py examples/working_functions.mvm")
+        print("  python src/run.py examples/simple_call.mvm")
         sys.exit(1)
     
     filename = sys.argv[1]

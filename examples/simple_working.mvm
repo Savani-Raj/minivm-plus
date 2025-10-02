@@ -1,0 +1,9 @@
+// Simple working example without functions
+
+let x = 2 + 3;
+let y = x * 2;
+let z = y + 0;
+print(z);  // Should print 10
+
+let a = 5 * 3;
+print(a);  // Should print 15
