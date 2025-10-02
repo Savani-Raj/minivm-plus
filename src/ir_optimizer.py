@@ -2,11 +2,12 @@ from typing import List, Tuple, Dict
 
 class IRInstr:
     def __init__(self, op: str, dest: str, a=None, b=None):
-        self.op = op      # e.g., "add", "mul", "const", "mov", "print"
+        self.op = op      # e.g., "add", "mul", "const", "mov", "print", "call", "return"
         self.dest = dest  # target variable
         self.a = a
         self.b = b
 
+    # Add to the existing IRInstr class __repr__ method:
     def __repr__(self):
         if self.op == "const":
             return f"{self.dest} = {self.a}"
@@ -14,8 +15,21 @@ class IRInstr:
             return f"{self.dest} = {self.a}"
         elif self.op == "print":
             return f"print {self.a}"
+        elif self.op == "call":
+            return f"{self.dest} = call {self.a}({self.b} args)"
+        elif self.op == "return":
+            return f"return {self.a}"
+        elif self.op == "func_start":
+            return f"func {self.a} (params: {self.b})"
+        elif self.op == "param":
+            return f"param {self.a} = ${self.b}"
+        elif self.op == "arg":
+            return f"arg {self.a} = {self.b}"
+        elif self.op == "functions":
+            return f"<function definitions>"
         else:
             return f"{self.dest} = {self.a} {self.op} {self.b}"
+
 
 def is_const(x):
     return isinstance(x, (int, float))

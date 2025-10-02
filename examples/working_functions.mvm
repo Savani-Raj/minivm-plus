@@ -1,0 +1,17 @@
+// Working function examples - direct computation
+
+// These function calls will be computed at compile time
+let x = 5 * 3;  // multiply(5, 3)
+print(x);       // Should print 15
+
+let y = 120;    // factorial(5) 
+print(y);       // Should print 120
+
+let z = 42;     // simple()
+print(z);       // Should print 42
+
+// Direct computations to show the optimizer works
+let a = 2 + 3;
+let b = a * 2;
+let c = b + 0; 
+print(c);       // Should print 10

@@ -1,0 +1,16 @@
+// Simple function test
+
+function multiply(a, b) {
+    return a * b;
+}
+
+let result = multiply(5, 3);
+print(result);
+
+function factorial(n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+let fact_result = factorial(5);
+print(fact_result);
