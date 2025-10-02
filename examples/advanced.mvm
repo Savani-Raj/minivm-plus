@@ -1,0 +1,9 @@
+// Advanced optimization demo
+
+let a = 2 + 3;
+let b = a * 2;      // Should become a + a via strength reduction
+let c = b + 0;      // Should become b via algebraic simplification  
+let d = a * 4;      // Should become a << 2 via strength reduction
+let e = c / 2;      // Should become c >> 1 via strength reduction
+
+print(e);

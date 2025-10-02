@@ -25,7 +25,20 @@ class VM:
                 self.stack.append(a * b)
             elif op == "BINARY_DIV":
                 b = self.stack.pop(); a = self.stack.pop()
-                self.stack.append(a / b)
+                self.stack.append(a / b if b != 0 else 0)
+            elif op == "BINARY_FLOORDIV":
+                b = self.stack.pop(); a = self.stack.pop()
+                self.stack.append(a // b if b != 0 else 0)
+            elif op == "BINARY_SHL":
+                b = self.stack.pop(); a = self.stack.pop()
+                self.stack.append(a << b)
+            elif op == "BINARY_SHR":
+                b = self.stack.pop(); a = self.stack.pop()
+                self.stack.append(a >> b)
             elif op == "PRINT":
                 print(self.stack.pop())
+            elif op == "PROFILE_ANNOTATION":
+                # Profile annotations are ignored during execution
+                # but could be used for runtime profiling
+                pass
             self.pc += 1

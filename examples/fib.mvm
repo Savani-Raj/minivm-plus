@@ -1,3 +1,9 @@
+// Optimization demo
+
 let x = 2 + 3;
-let y = x + 4;
+
+let y = x + 0;
+
+let z = 2 + 3;
+
 print(y);
